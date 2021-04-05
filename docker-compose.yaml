@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  python:
+    build: .
+    depends_on:
+      - neo4j_db
+    networks:
+      - mynetwork
+    links:
+      - neo4j_db
+
+
+  neo4j_db:
+    image: neo4j
+    expose:
+      - 7474
+      - 7687
+    ports: 
+        - "7476:7474" 
+        - "7689:7687" 
+    environment: 
+        - NEO4J_dbms_security_procedures_unrestricted=apoc.*,algo.* 
+        - NEO4J_dbms_security_procedures_whitelist=apoc.*,algo.* 
+        - NEO4J_apoc_import_file_enabled=true 
+        - NEO4J_dbms_shell_enabled=true 
+        #- dbms.connector.bolt.listen_address=:7688
+        #- dbms.connector.bolt.advertised_address=:7688
+        #- NEO4JLABS_PLUGINS=["apoc", "graph-algorithms"] 
+    volumes: 
+        - ./volume/plugins:/plugins 
+        - ./volume/data:/data 
+        - ./volume/import:/import
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
