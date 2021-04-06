@@ -1,1 +1,2 @@
-* * * * * root echo hello >> /var/log/cron.log 2>&1
+* * * * * /usr/local/bin/python /app/test.py >> /var/log/cron.log 2>&1
+* * * * * echo hello >> /var/log/cron.log 2>&1
